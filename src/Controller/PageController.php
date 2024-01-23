@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\ProfileType;
+use App\Service\ProfileService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends AbstractController
 {
@@ -51,19 +55,6 @@ class PageController extends AbstractController
             'title' => 'Hong Kong',
             'subtitle' => '香港',
             'background' => 'hongkong',
-        ]);
-    }
-
-    /**
-     * User account route for displaying it's own data on the app
-     */
-    #[Route('/account', name: 'account', methods: ['GET', 'POST'])]
-    public function account(): Response
-    {
-        if(!$this->getUser()->getFirstname()) {
-            return $this->redirectToRoute('complete_profile');
-        }
-        return $this->render('page/account.html.twig', [
         ]);
     }
 }
