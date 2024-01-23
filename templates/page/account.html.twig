@@ -9,15 +9,17 @@
 			<div class="d-flex bnb-height overflow-hidden">
 				<div class="col-sm-12 col-md-4 bg-white rounded m-2 shadow-sm text-center p-3">
 					<!-- User card -->
-					{# Button for edit (modal) #}
                     <h3>{{ app.user.fullname}}</h3>
                     <p>{{ app.user.email}}</p>
 					<p>{{ app.user.age}} yo</p>
+					<p>{{ app.user.city}}</p>
+					<p>{{ app.user.country}}</p>
+					{{ dump(app.user.roles) }}
                     <div class="position-relative w-50 m-auto">
                     <button class="position-absolute end-0 rounded-pill bg-white shadow border-0" data-bs-toggle="modal" data-bs-target="#accountModal">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-				    <img src={{ app.user.image }} alt="{{ app.user.fullname}}" class="img-fluid rounded-pill">
+				    <img src="/uploads/users/{{ app.user.image }}" alt="{{ app.user.fullname}}" class="img-fluid rounded-pill">
                     </div>
                     {{ include('components/account-modal.html.twig') }}
                 </div>
