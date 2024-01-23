@@ -18,6 +18,7 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('roles', ChoiceType::class, [
+                'label' => 'I am a:',
                 'mapped' => false,
                 'choices' => [
                     'Traveler' => 'user',
@@ -25,44 +26,57 @@ class ProfileType extends AbstractType
                     'Both' => 'host'
                 ],
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('firstname', TextType::class, [
+                'label' => 'First Name',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('lastname', TextType::class, [
+                'label' => 'Last Name',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('birthyear', NumberType::class, [
+                'label' => 'Your birth Year',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('address', TextType::class, [
+                'label' => 'Your billing address',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('city', TextType::class, [
+                'label' => 'Your city',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('country', TextType::class, [
+                'label' => 'Your country',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control  mb-2'
+                ]
+            ])
+            ->add('job', TextType::class, [
+                'label' => 'Your job',
+                'attr' => [
+                    'class' => 'form-control  mb-2'
                 ]
             ])
             ->add('image', FileType::class, [
+                'label' => 'Your profile picture',
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control-file'
+                    'class' => 'form-control-file mb-2'
                 ],
                 'constraints' => [
                     new File([
@@ -75,12 +89,7 @@ class ProfileType extends AbstractType
                     ])
                 ],
             ])
-            ->add('job', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ]
-            ])
-        ;
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
