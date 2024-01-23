@@ -9,14 +9,10 @@
 			<div class="d-flex bnb-height overflow-hidden">
 				<div class="col-md-4 bg-white rounded m-2 shadow-sm text-center p-3">
 					<!-- User card -->
-					{# Button for edit (modal) #}<h3>
-					{{ app.user.fullname}}
-					</h3><p>
-					{{ app.user.email}}
-					</p>
-						<p>{{ app.user.age}}
-					yo
-					</p>
+					{# Button for edit (modal) #}
+                    <h3>{{ app.user.fullname}}</h3>
+                    <p>{{ app.user.email}}</p>
+					<p>{{ app.user.age}} yo</p>
 				<img src={{ app.user.image }} alt="{{ app.user.fullname}}" class="img-fluid rounded-pill w-50"> </div>
 
 				<div class="col-md-8 bg-white rounded m-2 bnb-height overflow-scroll">
@@ -34,9 +30,7 @@
 									<tr>
 										<td>{{ item.title }}</td>
 										<td>{{ item.price }}€</td>
-										<td>
-											<a href="#">See the room</a>
-										</td>
+										<td><a href="#">See the room</a></td>
 									</tr>
 								{% endfor %}
 							</tbody>
