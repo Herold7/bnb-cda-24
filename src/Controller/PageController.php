@@ -60,6 +60,9 @@ class PageController extends AbstractController
     #[Route('/account', name: 'account', methods: ['GET', 'POST'])]
     public function account(): Response
     {
+        if(!$this->getUser()->getFirstname()) {
+            return $this->redirectToRoute('complete_profile');
+        }
         return $this->render('page/account.html.twig', [
         ]);
     }
