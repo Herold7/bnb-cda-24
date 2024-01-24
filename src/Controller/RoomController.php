@@ -46,8 +46,11 @@ class RoomController extends AbstractController
             12
         );
 
-        return $this->render('room/rooms.html.twig', [
+        return $this->render('room/index.html.twig', [
             'rooms' => $pagination,
+            'hostRooms' => $roomRepository->findBy(
+                ['host' => $this->getUser()]
+            )
         ]);
     }
 }
