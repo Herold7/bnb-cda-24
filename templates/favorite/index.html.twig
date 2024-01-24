@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}There is your favorites
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row text-center py-5">
+            <h1>My favorites</h1>
+        </div>
+        {% if favorites|length > 0 %}
+            {{ dump(favorites) }}
+            {% for item in favorites %}
+                TODO: Create a card favorite component
+            {% endfor %}
+
+        {% else %}
+            <div class="text-center">
+                <p>You don't have any favorite yet.</p>
+                <a href={{ path('app_room') }} class="btn btn-custom rounded-pill w-auto">Add a favorite</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
