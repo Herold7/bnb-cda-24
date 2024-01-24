@@ -11,7 +11,7 @@
 			{{ background == 'kyoto' or background == 'hongkong' ? subtitle : title }}
 		</p>
 		<div>
-			<a class="btn btn-custom btn-lg mt-5 rounded-pill" href="">Discover</a>
+			<a href={{ path('app_room_city', { city: city}) }} class="btn btn-custom btn-lg mt-5 rounded-pill">Discover</a>
 		</div>
 	</div>
 {% endblock %}
