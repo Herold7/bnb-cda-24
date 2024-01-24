@@ -12,6 +12,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FavoriteController extends AbstractController
 {
+    #[Route('/favorites', name: 'favorites', methods: ['GET'])]
+    public function index(FavoriteRepository $favoriteRepository): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('favorite/index.html.twig', [
+            'favorites' => $favoriteRepository->findBy([
+                'traveler' => $this->getUser()
+            ])
+        ]);
+    }
+
     #[Route('/add-favorite/{room}', name: 'add_favorite', methods: ['GET'])]
     public function addFavorite(
         Room $room, 
