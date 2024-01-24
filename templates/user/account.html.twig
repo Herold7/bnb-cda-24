@@ -194,11 +194,21 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					{{ form(form) }}
+					{{ form_start(form) }}
+						{{ form_row(form.roles) }}
+						{{ form_row(form.firstname) }}
+						{{ form_row(form.lastname) }}
+						{{ form_row(form.birthyear) }}
+						{{ form_row(form.address) }}
+						{{ form_row(form.city) }}
+						{{ form_row(form.country) }}
+						{{ form_row(form.job) }}
+						{{ form_row(form.image) }}
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					{{ form_end(form) }}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
 				</div>
 			</div>
 		</div>
