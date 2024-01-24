@@ -59,10 +59,10 @@
 								<h5 class="card-title">
 									Your bookings
 									<span class="badge bg-danger bg-opacity-10 text-danger">
-										{{ app.user.bookings | length }}
+										{{ app.user.bookings|length }}
 									</span>
 								</h5>
-								<a class="btn btn-primary-soft btn-sm" href="#">
+								<a class="btn btn-primary-soft btn-sm" href={{ path('bookings') }}>
 									See more
 								</a>
 							</div>
@@ -110,34 +110,36 @@
 								<h5 class="card-title">
 									Your favorites
 									<span class="badge bg-danger bg-opacity-10 text-danger">
-										{{ app.user.favorites | length }}
+										{{ app.user.favorites|length }}
 									</span>
 								</h5>
-								<a class="btn btn-primary-soft btn-sm" href="#">
+								<a class="btn btn-primary-soft btn-sm" href={{ path('favorites') }}>
 									See more
 								</a>
 							</div>
 							<div class="card-body position-relative pt-3">
-								<div class="row g-3">
-
-									<div class="col-md-4 col-sm-12">
-										<div class="card shadow-none text-center h-100">
-											<div class="card-body p-2">
-												<img src="https://placehold.co/250" class="img-fluid">
-											</div>
-											<div class="card-footer p-2 border-0">
-												<button class="btn btn-sm btn-custom rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
-													<i class="bi bi-eye"></i>
-													Check it
-												</button>
-												<button class="btn btn-sm btn-dark rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
-													<i class="bi bi-trash"></i>
-													Remove
-												</button>
+								<div class="d-flex gap-3 overflow-x-scroll">
+									{% for item in app.user.favorites %}
+										<div class="col-md-4 col-sm-12">
+											<div class="card shadow-none text-center h-100">
+												<div class="card-body p-2">
+													<img src="" class="img-fluid">
+													{{ dump(item.id) }}
+												</div>
+												<div class="card-footer p-2 border-0">
+													<button class="btn btn-sm btn-custom rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
+														<i class="bi bi-eye"></i>
+														Check it
+													</button>
+													<button class="btn btn-sm btn-dark rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
+														<i class="bi bi-trash"></i>
+														Remove
+													</button>
+												</div>
 											</div>
 										</div>
-									</div>
 
+									{% endfor %}
 								</div>
 							</div>
 							<!-- Card body END -->
