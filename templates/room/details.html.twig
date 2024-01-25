@@ -55,7 +55,11 @@
 						<label for="guests" class="form-label">Guests</label>
 						<input type="number" class="form-control" id="guests" name="guests" required>
 					</div>
-					<button type="submit" class="btn btn-custom btn-lg rounded-pill">Book</button>
+					{% if is_granted('ROLE_USER') %}
+							<button type="submit" class="btn btn-custom btn-lg rounded-pill">Book</button>
+						{% else %}
+							<a href="{{ path('app_login') }}" class="btn btn-dark btn-lg rounded-pill">Login to book</a>
+					{% endif %}
 				</form>
 			</div>
 		</div>
