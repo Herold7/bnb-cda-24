@@ -73,7 +73,8 @@ body {
 /* Footer */
 footer {
     position: fixed;
-    bottom: 2rem;
+    z-index: 100;
+    bottom: 0;
 }
 
 /* Room Card */
