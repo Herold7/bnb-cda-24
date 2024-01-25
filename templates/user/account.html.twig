@@ -68,34 +68,35 @@
 							</div>
 							<div class="card-body position-relative pt-3">
 								<div class="row g-3">
-
-									<div class="col-md-4 col-sm-12">
-										<div class="card shadow-none text-center h-100">
-											<div class="card-body p-2 pb-0">
-												<p class="card-title border fw-bold rounded-pill mb-1 mt-1">
-													Title of the room
-												</p>
-												<table class="table">
-													<tbody>
-														<tr>
-															<th scope="row">Start at</th>
-															<td>01/01/2024</td>
-														</tr>
-														<tr>
-															<th scope="row">End at</th>
-															<td>11/01/2024</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-											<div class="card-footer p-2 border-0">
-												<button class="btn btn-sm btn-custom rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
-													<i class="bi bi-eye"></i>
-													Check your booking
-												</button>
+									{% for booking in app.user.bookings %}
+										<div class="col-md-4 col-sm-12">
+											<div class="card shadow-none text-center h-100">
+												<div class="card-body p-2 pb-0">
+													<p class="card-title border fw-bold rounded-pill mb-1 mt-1">
+														{{ booking.room.title|slice(0, 15) }}...
+													</p>
+													<table class="table">
+														<tbody>
+															<tr>
+																<th scope="row">Start at</th>
+																<td>{{ booking.checkInString }}</td>
+															</tr>
+															<tr>
+																<th scope="row">End at</th>
+																<td>{{ booking.checkOutString }}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="card-footer p-2 border-0">
+													<a href={{ path('booking_show', { booking: booking.id }) }} class="btn btn-sm btn-custom rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top">
+														<i class="bi bi-eye"></i>
+														Check your booking
+													</a>
+												</div>
 											</div>
 										</div>
-									</div>
+									{% endfor %}
 
 								</div>
 							</div>
@@ -215,4 +216,8 @@
 			</div>
 		</div>
 	</div>
+
+	{% block footer %}
+		{% include 'components/footer-city.html.twig' %}
+	{% endblock %}
 {% endblock %}
