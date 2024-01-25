@@ -30,7 +30,7 @@
 	{% if is_granted('ROLE_HOST') %}
 		TODO
 		{% else %}
-			<a class="text-dark" href={{ path('room', { id : item.id}) }}>
+			<a class="text-dark text-decoration-none" href={{ path('room', { id : item.id}) }}>
 				<p class="fw-bold mt-3 mb-1 text-dark">{{ item.title|slice(0,30) }}...</p>
 				<p class="text-dark mb-1">start from
 					<span class="fw-bold">{{ item.price }}€</span>
