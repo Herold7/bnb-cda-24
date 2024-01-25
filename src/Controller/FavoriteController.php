@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class FavoriteController extends AbstractController
 {
@@ -29,15 +30,18 @@ class FavoriteController extends AbstractController
     #[Route('/add-favorite/{room}', name: 'add_favorite', methods: ['GET'])]
     public function addFavorite(
         Room $room, 
+        Request $request,
         EntityManagerInterface $em
         ): Response
     {
-        $user = $this->getUser();
-
-        if (!$user) {
+        
+        if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
+        $previous = $request->headers->get('referer');
+        $user = $this->getUser();
+        
         $newFavorite = new Favorite();
         $newFavorite->setTraveler($user);
         $newFavorite->addRoom($room);
@@ -47,11 +51,12 @@ class FavoriteController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', 'Room added to favorites successfully.');
-        return $this->redirectToRoute('app_room');
+        return $this->redirect($previous);
     }
 
     #[Route('/remove-favorite/{room}', name: 'remove_favorite', methods: ['GET'])]
     public function removeFavorite(
+        Request $request,
         FavoriteRepository $favoriteRepository,
         EntityManagerInterface $em
     ): Response
@@ -60,6 +65,7 @@ class FavoriteController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        $previous = $request->headers->get('referer');
         $user = $this->getUser();
 
         $favorite = $favoriteRepository->findOneBy([
@@ -68,11 +74,13 @@ class FavoriteController extends AbstractController
 
         if ($favorite) {
             $user->removeFavorite($favorite);
+            $em->persist($user);
             $em->remove($favorite);
             $em->flush();
             $this->addFlash('success', 'Room removed from favorites successfully.');
         }
 
-        return $this->redirectToRoute('app_room');
+        // Redirect to the last page visited by the user
+        return $this->redirect($previous);
     }
 }
