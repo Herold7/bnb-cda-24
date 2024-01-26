@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Review;
 use App\Entity\Room;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,6 +54,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Offers', 'fas fa-cubes', Room::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Reviews', 'fas fa-star', Review::class);
         yield MenuItem::linkToRoute('Back to app', 'fas fa-arrow-left', 'app_room');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
