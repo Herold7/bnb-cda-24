@@ -11,8 +11,9 @@ security:
                 property: email
 
     role_hierarchy:
-        ROLE_HOST:       [ROLE_USER]
-        ROLE_ADMIN:      [ROLE_HOST]
+        ROLE_HOST:              [ROLE_USER]
+        ROLE_ADMIN:             [ROLE_HOST]
+        ROLE_SUPER_ADMIN:       [ROLE_ADMIN]
 
     firewalls:
         dev:
