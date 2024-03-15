@@ -40,6 +40,12 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
 
+    public function __construct()
+    {
+        $this->number = 'BNB-' . random_int(1000, 9999); // génère un numéro de réservation
+        $this->created_at = new \DateTime(); // date de création de la réservation
+    }
+
     public function getId(): ?int
     {
         return $this->id;
