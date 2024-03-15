@@ -42,7 +42,8 @@
 		<div class="row mb-5">
 			<div class="border border-2 rounded-3 p-3">
 				<p class="fs-3">Make a reservation</p>
-				<form action={{ path('book_room', { room: room.id }) }} method="post">
+				<form action={{ path('book_room') }} method="post">
+					<input type="hidden" name="room" value="{{ room.id }}">
 					<div class="mb-3">
 						<label for="checkin" class="form-label">Check-in</label>
 						<input type="date" class="form-control" id="checkin" name="checkin" required>

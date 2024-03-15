@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}What is your next sweet home?
+{% endblock %}
+
+{% block body %}
+	<div class="p-5 mb-4 border-bottom border-2">
+		<h1 class="">
+			Please confirm your booking
+		</h1>
+	</div>
+
+	<div class="container pb-5">
+		<div class="row">
+			<div class="col-md-4 border rounded-3 p-3">
+				<h3>Just a few steps</h3>
+				<p>You'll book the room
+					{{ confirmation.room.title }}
+					in the
+					{{ confirmation.room.city }}
+					city, for you and
+					{{ confirmation.occupants }}
+					guests.</p>
+				<hr>
+				<p>From
+					{{ confirmation.checkIn|date('d/m/Y') }}
+					to
+					{{ confirmation.checkOut|date('d/m/Y') }}.</p>
+				<hr>
+				<p>Total nights :
+					{{ dateDiff.days }}
+					for a total amount of
+					{{ totalAmount }}€.</p>
+				<hr>
+				<p>Proceed to securised payment :</p>
+				<button class="btn btn-success">Confirm my booking</button>
+			</div>
+			<div class="col-md-8">
+				<img src="{{ asset('/uploads/rooms/') }}{{ confirmation.room.cover }}" class="img-fluid rounded-3">
+			</div>
+		</div>
+	</div>
+	{% block footer %}
+		{% include 'components/footer-city.html.twig' %}
+	{% endblock %}
+
+{% endblock %}
