@@ -109,24 +109,32 @@ class RoomController extends AbstractController
         header('Content-Type: application/json');
         $checkout_session = Session::create([
             'payment_method_types' => ['card'],
-            'line_items' => [
-                [
+            'line_items' => [[
                     'price_data' => [
                         'currency' => 'eur',
                         'unit_amount' => $request->request->get('total') * 100, // Stripe utilise des centimes
                         'product_data' => [ // Les informations du produit sont personnalisables
-                            'name' => $booking->getRoom()->getTitle(),
+                            'name' => $request->request->get('title')],
                         ],
-                        'quantity' => 1,
-                    ]
-                ],
+                    'quantity' => 1,
+                ]],
                 'mode' => 'payment',
                 'success_url' => $this->generateUrl('payment_success', [], 0),
                 'cancel_url' => $this->generateUrl('payment_cancel', [], 0),
-            ]
-        ]);
+            ]);
 
-        header("HTTP/1.1 303 See Other");
-        header("Location: " . $checkout_session->url);
+        return $this->redirect($checkout_session->url, 303);
+    }
+
+    #[Route('/payment/success', name: 'payment_success', methods: ['GET'])]
+    public function paymentSuccess(): Response
+    {
+        return $this->render('room/payment_success.html.twig');
+    }
+
+    #[Route('/payment/cancel', name: 'payment_cancel', methods: ['GET'])]
+    public function paymentCancel(): Response
+    {
+        return $this->render('room/payment_cancel.html.twig');
     }
 }
