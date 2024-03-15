@@ -6,6 +6,8 @@
 parameters:
     upload_dir_user: '%kernel.project_dir%/public/uploads/users'
     upload_dir_room: '%kernel.project_dir%/public/uploads/rooms'
+    STRIPE_PUBLIC_KEY: '%env(STRIPE_PUBLIC_KEY)%'
+    STRIPE_SECRET_KEY: '%env(STRIPE_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file
