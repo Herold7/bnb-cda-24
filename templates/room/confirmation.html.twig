@@ -33,7 +33,11 @@
 					{{ totalAmount }}€.</p>
 				<hr>
 				<p>Proceed to securised payment :</p>
-				<button class="btn btn-success">Confirm my booking</button>
+				<form action={{ path('payment') }} method="post">
+					<input type="hidden" name="number" value="{{ confirmation.number }}">
+					<input type="hidden" name="total" value="{{ totalAmount }}">
+					<button class="btn btn-success">Confirm my booking</button>
+				</form>
 			</div>
 			<div class="col-md-8">
 				<img src="{{ asset('/uploads/rooms/') }}{{ confirmation.room.cover }}" class="img-fluid rounded-3">

@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Booking;
+use Stripe\Stripe;
 use App\Entity\Room;
+use App\Entity\Booking;
+use Stripe\Checkout\Session;
 use App\Repository\RoomRepository;
+use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,7 +67,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/confirmation', name: 'book_room', methods: ['GET','POST'])]
+    #[Route('/confirmation', name: 'book_room', methods: ['GET', 'POST'])]
     public function bookRoom(
         Request $request,
         EntityManagerInterface $em,
@@ -93,5 +96,37 @@ class RoomController extends AbstractController
         } else { // Si la méthode est GET
             return $this->render('room/confirmation.html.twig'); // retourne la vue sans objet
         }
+    }
+
+    #[Route('/payment', name: 'payment', methods: ['POST'])]
+    public function payment(
+        Request $request,
+        BookingRepository $bookingRepository,
+    ) {
+        $booking = $bookingRepository->find($request->request->get('number')); // on récupère la réservation
+        Stripe::setApiKey($this->getParameter('STRIPE_SECRET_KEY')); // on récupère la clé secrète
+
+        header('Content-Type: application/json');
+        $checkout_session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'unit_amount' => $request->request->get('total') * 100, // Stripe utilise des centimes
+                        'product_data' => [ // Les informations du produit sont personnalisables
+                            'name' => $booking->getRoom()->getTitle(),
+                        ],
+                        'quantity' => 1,
+                    ]
+                ],
+                'mode' => 'payment',
+                'success_url' => $this->generateUrl('payment_success', [], 0),
+                'cancel_url' => $this->generateUrl('payment_cancel', [], 0),
+            ]
+        ]);
+
+        header("HTTP/1.1 303 See Other");
+        header("Location: " . $checkout_session->url);
     }
 }
