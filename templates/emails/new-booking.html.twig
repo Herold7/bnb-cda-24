@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@900&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+		<link rel="stylesheet" href={{ asset('/css/app.css') }}>
+	</head>
+	<body>
+		<div class="d-flex m-auto flex-column justify-content-center align-items-center col-md-4 border rounded-3 p-3 mt-5">
+			<img src={{ asset('/images/icon-tagline.svg') }} width="60">
+            <h3>A new booking has been made</h3>
+			<p>Go to your dashboard to confirm the availability of the room</p>
+            <div class="d-flex gap-3 justify-content-center align-items-center">
+                <a href="#" class="btn btn-custom rounded-pill">Let's go</a>
+            </div>
+		</div>
+	</body>
+</html>
