@@ -46,6 +46,9 @@ class Booking
     #[ORM\Column]
     private ?bool $isConfirmed = false;
 
+    #[ORM\OneToOne(mappedBy: 'booking', cascade: ['persist', 'remove'])]
+    private ?Invoice $invoice = null;
+
     public function __construct()
     {
         $this->number = 'BNB-' . random_int(1000, 9999); // génère un numéro de réservation
@@ -192,6 +195,23 @@ class Booking
     public function setIsConfirmed(bool $isConfirmed): static
     {
         $this->isConfirmed = $isConfirmed;
+
+        return $this;
+    }
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): static
+    {
+        // set the owning side of the relation if necessary
+        if ($invoice->getBooking() !== $this) {
+            $invoice->setBooking($this);
+        }
+
+        $this->invoice = $invoice;
 
         return $this;
     }

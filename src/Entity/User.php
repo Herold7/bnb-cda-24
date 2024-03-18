@@ -447,4 +447,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->getFullname();
     }
+
+    public function getFullAddress(): string
+    {
+        return $this->address . ', ' . $this->city . ', ' . $this->country;
+    }
 }
