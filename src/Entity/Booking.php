@@ -40,6 +40,12 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
 
+    #[ORM\Column]
+    private ?bool $isPaid = false;
+
+    #[ORM\Column]
+    private ?bool $isConfirmed = false;
+
     public function __construct()
     {
         $this->number = 'BNB-' . random_int(1000, 9999); // génère un numéro de réservation
@@ -164,6 +170,30 @@ class Booking
     {
         $diff = $this->getCheckIn()->diff($this->getCheckOut());
         return $diff->days;
+    }
+
+    public function isIsPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): static
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function isIsConfirmed(): ?bool
+    {
+        return $this->isConfirmed;
+    }
+
+    public function setIsConfirmed(bool $isConfirmed): static
+    {
+        $this->isConfirmed = $isConfirmed;
+
+        return $this;
     }
 
 }

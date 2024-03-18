@@ -8,6 +8,7 @@ use Stripe\Checkout\Session;
 use App\Repository\RoomRepository;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,8 +36,12 @@ class PaymentController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $this->generateUrl('payment_success', [], 0),
-            'cancel_url' => $this->generateUrl('payment_cancel', [], 0),
+            'success_url' => $this->generateUrl('payment_success', [
+                'number' => $request->request->get('number'),
+            ], 0),
+            'cancel_url' => $this->generateUrl('payment_cancel', [
+                'number' => $request->request->get('number'),
+            ], 0),
         ]);
 
         return $this->redirect($checkout_session->url, 303);
@@ -44,11 +49,37 @@ class PaymentController extends AbstractController
 
     // Route de redirection en cas de paiement réussi
     #[Route('/payment/success', name: 'payment_success', methods: ['GET'])]
-    public function paymentSuccess(Request $request): Response
+    public function paymentSuccess(
+        Request $request,
+        BookingRepository $bookingRepository,
+        EntityManagerInterface $em
+        ): Response
     {
-        dd($request->query->all());
-        return $this->render('payment/success.html.twig');
+        /**
+         * Le choix  entre [findOneBy, find] et [findBy, findAll] dépend de la situation
+         * [findOneBy, find] : retourne un objet (ce qui permet de manipuler les méthodes de l'objet)
+         * [findBy, findAll] : retourne un tableau (suffit pour un affichage de données)
+         */
+        $booking = $bookingRepository->findOneBy(['number' => $request->query->get('number')]);
+        $booking->setIsPaid(true);
+        $em->persist($booking);
+        $em->flush();
+        return $this->render('payment/success.html.twig', [
+            'booking' => $booking
+        ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Route de redirection en cas d'annulation de paiement
     #[Route('/payment/cancel', name: 'payment_cancel', methods: ['GET'])]

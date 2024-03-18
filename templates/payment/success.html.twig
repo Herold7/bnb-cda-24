@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your payment was successful!
+{% endblock %}
+
+{% block body %}
+	<div class="d-flex justify-content-center align-items-center vh-100">
+		<h3>Your payment was successful!</h3>
+		<p>Wait for the host to confirm your booking. You will receive an email with the details of your booking.</p>
+		<div class="col-md-4 border rounded-3 p-3">
+			<p>You've booked the room
+				{{ booking.room.title }}
+				in the
+				{{ booking.room.city }}
+				city, for you and
+				{{ booking.occupants }}
+				guests.</p>
+			<hr>
+			<p>From
+				{{ booking.checkIn|date('d/m/Y') }}
+				to
+				{{ booking.checkOut|date('d/m/Y') }}.</p>
+			<hr>
+		</div>
+	</div>
+{% endblock %}
