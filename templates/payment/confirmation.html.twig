@@ -35,6 +35,7 @@
 				<p>Proceed to securised payment :</p>
 				<form action={{ path('payment') }} method="post">
 					<input type="hidden" name="number" value="{{ confirmation.number }}">
+					<input type="hidden" name="title" value="{{ confirmation.room.title }}">
 					<input type="hidden" name="total" value="{{ totalAmount }}">
 					<button class="btn btn-success">Confirm my booking</button>
 				</form>
