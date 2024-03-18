@@ -7,6 +7,7 @@ use App\Entity\Booking;
 use Stripe\Checkout\Session;
 use App\Repository\RoomRepository;
 use App\Repository\BookingRepository;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,8 @@ class PaymentController extends AbstractController
     public function paymentSuccess(
         Request $request,
         BookingRepository $bookingRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        NotificationService $notificationService
         ): Response
     {
         /**
@@ -64,21 +66,14 @@ class PaymentController extends AbstractController
         $booking->setIsPaid(true);
         $em->persist($booking);
         $em->flush();
+
+        // On notifie l'hôte de la réservation
+        $notificationService->sendNewBooking($booking);
+
         return $this->render('payment/success.html.twig', [
             'booking' => $booking
         ]);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Route de redirection en cas d'annulation de paiement
