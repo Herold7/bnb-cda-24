@@ -80,22 +80,6 @@ class PaymentController extends AbstractController
         ]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     // Route de redirection en cas d'annulation de paiement
     #[Route('/payment/cancel', name: 'payment_cancel', methods: ['GET'])]
     public function paymentCancel(): Response
