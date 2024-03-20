@@ -4,23 +4,38 @@
 {% endblock %}
 
 {% block body %}
-	<div class="d-flex m-auto flex-column justify-content-center align-items-center col-md-4 border rounded-3 p-3 mt-5">
-		<h3>Your payment was successful!</h3>
-		<p>Wait for the host to confirm your booking. You will receive an email with the details of your booking.</p>
-		<p>You've booked the room
-			{{ booking.room.title }}
-			in the
-			{{ booking.room.city }}
-			city, for you and
-			{{ booking.occupants }}
-			guests.</p>
-		<hr>
-		<p>From
-			{{ booking.checkIn|date('d/m/Y') }}
-			to
-			{{ booking.checkOut|date('d/m/Y') }}.</p>
-		<hr>
-		<a href={{ path('account') }} class="btn btn-custom rounded-pill">See my profile</a>
-	</div>
-	{{ dump(invoice) }}
-</div>{% endblock %}
+	{% if booking is defined %}
+		<div class="container pb-5">
+			<div class="d-flex m-auto flex-column justify-content-center align-items-center col-md-4 border rounded-3 p-3 mt-5 mb-5">
+				<h3>Your payment was successful!</h3>
+				<p>Wait for the host to confirm your booking. You will receive an email with the details of your booking.</p>
+				<p>You've booked the room
+					{{ booking.room.title }}
+					in the
+					{{ booking.room.city }}
+					city, for you and
+					{{ booking.occupants }}
+					guests.</p>
+				<hr>
+				<p>From
+					{{ booking.checkIn|date('d/m/Y') }}
+					to
+					{{ booking.checkOut|date('d/m/Y') }}.</p>
+				<hr>
+				<a href={{ path('account') }} class="btn btn-custom rounded-pill">See my profile</a>
+				{% if invoice is defined %}
+					<a href={{ path('invoice', {'slug': invoice.slug}) }} class="btn btn-outlined-dark rounded-pill">Check my invoice</a>
+				{% endif %}
+			</div>
+		</div>
+	{% else %}
+		<div class="container">
+			<div class="d-flex m-auto flex-column justify-content-center align-items-center col-md-4 border rounded-3 p-3 mt-5">
+				<h3>It seems you haven't booked a room yet!</h3>
+				<p>Go to the home page and find the perfect room for you.</p>
+				<hr>
+				<a href={{ path('paris') }} class="btn btn-custom rounded-pill">See some rooms</a>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

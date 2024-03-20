@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use Stripe\Stripe;
 use App\Entity\Booking;
+use App\Entity\Invoice;
 use Stripe\Checkout\Session;
 use App\Repository\RoomRepository;
 use App\Repository\BookingRepository;
+use App\Repository\InvoiceRepository;
 use App\Service\InvoiceService;
 use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,30 +55,43 @@ class PaymentController extends AbstractController
     public function paymentSuccess(
         Request $request,
         BookingRepository $bookingRepository,
+        InvoiceRepository $invoiceRepository,
         EntityManagerInterface $em,
         NotificationService $notificationService,
         InvoiceService $invoiceService
-        ): Response
-    {
+    ): Response {
         /**
          * Le choix  entre [findOneBy, find] et [findBy, findAll] dépend de la situation
          * [findOneBy, find] : retourne un objet (ce qui permet de manipuler les méthodes de l'objet)
          * [findBy, findAll] : retourne un tableau (suffit pour un affichage de données)
          */
         $booking = $bookingRepository->findOneBy(['number' => $request->query->get('number')]);
-        $booking->setIsPaid(true);
-        $em->persist($booking);
-        $em->flush();
 
-        // On notifie l'hôte de la réservation
-        $notificationService->sendNewBooking($booking);
-        
-        
-        return $this->render('payment/success.html.twig', [
-            'booking' => $booking,
-            // On crée la facture
-            'invoice' => $invoiceService->createInvoice($booking),
-        ]);
+        // Si la réservation n'existe pas
+        if (!$booking) {
+            return $this->render('payment/success.html.twig');
+        } else {
+            // On vérifie si la réservation est déjà payée
+            if ($booking->isIsPaid() === true) {
+                $invoice = $invoiceRepository->findOneBy(['booking' => $booking]);
+            } else {
+                $booking->setIsPaid(true);
+                $em->persist($booking);
+                $em->flush();
+
+                // On notifie l'hôte de la réservation
+                $notificationService->sendNewBooking($booking);
+                // On crée la facture
+                $invoiceService->createInvoice($booking);
+                // On récupère la facture
+                $invoice = $invoiceRepository->findOneBy(['booking' => $booking]);
+            }
+
+            return $this->render('payment/success.html.twig', [
+                'booking' => $booking,
+                'invoice' => $invoice,
+            ]);
+        }
     }
 
     // Route de redirection en cas d'annulation de paiement
@@ -116,6 +130,21 @@ class PaymentController extends AbstractController
             ]);
         } else { // Si la méthode est GET
             return $this->render('payment/confirmation.html.twig'); // retourne la vue sans objet
+        }
+    }
+
+    // Route pour accèder à la facture
+    #[Route('/invoice/{slug}', name: 'invoice', methods: ['GET'])]
+    public function invoice(
+        Invoice $invoice,
+    ): Response {
+        
+        if($invoice->getBooking()->getTraveler() !== $this->getUser()) {
+            return $this->redirectToRoute('account');
+        } else {
+        return $this->render('payment/invoice.html.twig', [
+            'invoice' => $invoice,
+        ]);
         }
     }
 }
