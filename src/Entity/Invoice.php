@@ -27,9 +27,13 @@ class Invoice
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->slug = uniqid();
     }
 
     public function getId(): ?int
@@ -81,6 +85,31 @@ class Invoice
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    // Host address
+    public function getHostAddress(): string
+    {
+        return $this->booking->getRoom()->getHost()->getFullAddress();
+    }
+
+    // Montant total
+    public function getTotalAmount(): float
+    {
+        $dateDiff = $this->booking->getCheckIn()->diff($this->booking->getCheckOut());
+        return $dateDiff->days * $this->booking->getRoom()->getPrice();
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
