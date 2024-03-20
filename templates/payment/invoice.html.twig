@@ -1,7 +1,80 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Invoice #{{ invoice.number }}</title>
+		<link rel="icon" href="">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@900&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+		<link rel="stylesheet" href={{ asset('/css/app.css') }}>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	</head>
+	<body>
+	<div id="back" class="bg-secondary text-center">
+		<a class="text-decoration-none text-white pt-3 pb-3" href={{ path('account') }}>Back to your profile page</a>
+	</div>
+		<section id="invoice" class="mb-5 p-4 d-flex justify-content-center w-100">
+			<div class="card">
+				<div class="card-body mx-4">
+					<div class="container">
+						<p class="my-5 mx-5" style="font-size: 30px;">Thank for your booking</p>
+						<div class="row">
+							<ul class="list-unstyled">
+								<li class="text-black">{{ invoice.booking.traveler.fullName }}</li>
+								<li class="text-muted mt-1">
+									<span class="text-black">Invoice</span>
+									#{{ invoice.number }}</li>
+								<li class="text-black mt-1">{{ invoice.createdAt|date('d/m/Y') }}</li>
+							</ul>
+							<hr>
+							<div class="col-xl-10">
+								<p>Booking for X night(s)</p>
+								<p class="fw-bold">{{ invoice.booking.room.title }}</p>
+								<p>
+									<span class="text-muted">City:</span>
+									{{ invoice.booking.room.city|capitalize }}</p>
+								<p>
+									<span class="text-muted">From:</span>
+									{{ invoice.booking.checkIn|date('d/m/Y') }}
+									to
+									{{ invoice.booking.checkOut|date('d/m/Y') }}</p>
 
-{% block title %}Your invoice{% endblock %}
+							</div>
+							<div class="col-xl-2">
+								<p class="float-end">{{ invoice.booking.room.price }}.00€/night</p>
+							</div>
+							<hr>
+						</div>
+						<div class="row text-black">
+							<div class="col-xl-12">
+								<p class="float-end fw-bold">Total:
+									{{ invoice.totalAmount }}.00€</p>
+							</div>
+							<hr style="border: 2px solid black;">
+						</div>
+						<div class="text-center" style="margin-top: 90px;">
+							<button id="print" class="btn btn-success rounded-pill">Download</button>
+							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script>
+			let invoice = document.getElementById('invoice');
+			let printBtn = document.getElementById('print');
+			let backLink = document.getElementById('back');
 
-{% block body %}
-	{{ dump(invoice) }}
-{% endblock %}
+			printBtn.addEventListener('click', () => {
+				printBtn.classList.add('d-none');
+				backLink.classList.add('d-none');
+				window.print();
+				// invoice.print();
+			});
+		</script>
+	</body>
+</html>
