@@ -7,14 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;// importer la classe PasswordAuthenticatedUserInterface
+use Symfony\Component\Security\Core\User\UserInterface;// importer la classe UserInterface
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]// annotation pour définir l'entité User
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]// annotation pour définir un email unique
+class User implements UserInterface, PasswordAuthenticatedUserInterface// implémenter les interfaces UserInterface et PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\Email(
+    #[Assert\Email(// validation de l'email grâce à la classe Assert qui permet de définir des contraintes
         message: 'The email "{{ value }}" is not a valid email. Try again.',
     )]
     private ?string $email = null;
@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // )]
     private ?string $password = null;
 
-    #[Assert\Length(
+    #[Assert\Length(// validation de la longueur du prénom
         min: 2,
         max: 50,
         minMessage: 'Your firstname must be at least {{ limit }} characters long',
@@ -124,9 +124,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'traveler', targetEntity: Favorite::class, orphanRemoval: true)]
     private Collection $favorites;
 
-    public function __construct()
+    public function __construct()// constructeur de la classe User
     {
-        $this->rooms = new ArrayCollection();
+        $this->rooms = new ArrayCollection();// initialiser la collection de rooms
         $this->reviews = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->favorites = new ArrayCollection();

@@ -2,9 +2,8 @@
 
 namespace App\Service;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;// import the ParameterBagInterface class
-
-class ProfileService// Service to update user profile
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;// importer la classe ParameterBagInterface
+class ProfileService// Service pour la gestion du profil utilisateur
 {
     private $parameterBag;
 
@@ -13,8 +12,8 @@ class ProfileService// Service to update user profile
         $this->parameterBag = $parameterBag;
     }
 
-    public function updateProfile($form, $user, $em)// update user profile
-    {// set user details(hydrate the user object with the form data)
+    public function updateProfile($form, $user, $em)// mise à jour du profil utilisateur
+    {// gérer la mise à jour du profil utilisateur(hydrater l'objet User)
         $user->setFirstname($form->get('firstname')->getData());
         $user->setLastname($form->get('lastname')->getData());
         $user->setBirthyear($form->get('birthyear')->getData());
@@ -23,7 +22,7 @@ class ProfileService// Service to update user profile
         $user->setCountry($form->get('country')->getData());
         $user->setJob($form->get('job')->getData());
 
-        // Upload image
+        // Télécharger l'image
         if($form->get('image')->getData()) {
             $file = $form->get('image')->getData();
             $filename = md5(uniqid()) . '.' . $file->guessExtension();
@@ -37,14 +36,14 @@ class ProfileService// Service to update user profile
             }
         }
 
-        // Define role
+        // Definir les rôles
         if($form->get('roles')->getData() == 'host') {
             $user->setRoles(['ROLE_HOST']);
         } else {
             $user->setRoles(['ROLE_USER']);
         }
         
-        $em->persist($user);// save the changes
-        $em->flush();// commit the changes
+        $em->persist($user);// Enregistrer les modifications
+        $em->flush();// committer les changements
     }
 }

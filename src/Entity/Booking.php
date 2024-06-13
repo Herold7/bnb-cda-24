@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\BookingRepository;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BookingRepository;// importer la classe BookingRepository
+use Doctrine\DBAL\Types\Types;// importer la classe Types
+use Doctrine\ORM\Mapping as ORM;// importer la classe ORM
 
-#[ORM\Entity(repositoryClass: BookingRepository::class)]
+#[ORM\Entity(repositoryClass: BookingRepository::class)]// annotation pour définir l'entité Booking
 class Booking
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Id]// annotation pour définir l'identifiant
+    #[ORM\GeneratedValue]// annotation pour générer automatiquement l'identifiant
+    #[ORM\Column]// annotation pour définir la colonne
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -29,9 +29,9 @@ class Booking
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bookings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $traveler = null;
+    #[ORM\ManyToOne(inversedBy: 'bookings')]// annotation pour définir la relation entre Booking et User
+    #[ORM\JoinColumn(nullable: false)]// annotation pour définir la colonne de jointure
+    private ?User $traveler = null;// définir l'utilisateur qui a effectué la réservation
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Review $review = null;
@@ -49,7 +49,7 @@ class Booking
     #[ORM\OneToOne(mappedBy: 'booking', cascade: ['persist', 'remove'])]
     private ?Invoice $invoice = null;
 
-    public function __construct()
+    public function __construct()// constructeur de la classe Booking
     {
         $this->number = 'BNB-' . random_int(1000, 9999); // génère un numéro de réservation
         $this->created_at = new \DateTime(); // date de création de la réservation
@@ -60,12 +60,12 @@ class Booking
         return $this->id;
     }
 
-    public function getNumber(): ?string
+    public function getNumber(): ?string// méthode pour obtenir le numéro de réservation
     {
         return $this->number;
     }
 
-    public function setNumber(string $number): static
+    public function setNumber(string $number): static// méthode pour définir le numéro de réservation
     {
         $this->number = $number;
 
@@ -156,19 +156,19 @@ class Booking
         return $this;
     }
 
-    // Convert checkin date to string
+    // Convertir la date de checkin en chaîne
     public function getCheckInString(): string
     {
         return $this->getCheckIn()->format('d/m/Y');
     }
 
-    // Convert checkout date to string
+    // Convertir la date de checkout en chaîne
     public function getCheckOutString(): string
     {
         return $this->getCheckOut()->format('d/m/Y');
     }
 
-    // Get the number of days between checkin and checkout
+    // Obtenir le nombre de jours de réservation
     public function getDays(): int
     {
         $diff = $this->getCheckIn()->diff($this->getCheckOut());
@@ -206,12 +206,12 @@ class Booking
 
     public function setInvoice(Invoice $invoice): static
     {
-        // set the owning side of the relation if necessary
+        // modifier l'entité associée, si nécessaire
         if ($invoice->getBooking() !== $this) {
             $invoice->setBooking($this);
         }
 
-        $this->invoice = $invoice;
+        $this->invoice = $invoice;// définir la facture
 
         return $this;
     }
