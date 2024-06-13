@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Form\ProfileType;
-use App\Service\ProfileService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\ProfileType;// importer la classe ProfileType qui permet de gérer le formulaire de profil utilisateur
+use App\Service\ProfileService;// importer la classe ProfileService qui permet de gérer le profil utilisateur
+use Doctrine\ORM\EntityManagerInterface;// importer la classe EntityManagerInterface qui permet de gérer les entités
+use Symfony\Component\HttpFoundation\Request;// importer la classe Request qui permet de gérer les requêtes HTTP
+use Symfony\Component\HttpFoundation\Response;// importer la classe Response qui permet de gérer les réponses HTTP
+use Symfony\Component\Routing\Annotation\Route;// importer la classe Route qui permet de définir les routes
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;// importer la classe AbstractController qui est une classe de base pour les contrôleurs
 
 class UserController extends AbstractController
 {
@@ -42,7 +42,7 @@ class UserController extends AbstractController
         ProfileService $profileService
     ): Response
     {
-        if(!$this->getUser()->getFirstname()) {
+        if(!$this->getUser() || !$this->getUser()->getFirstname()) {
             return $this->redirectToRoute('complete_profile');
         }
 
