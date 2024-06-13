@@ -2,11 +2,19 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;// import the ParameterBagInterface class
 
-class ProfileService
+class ProfileService// Service to update user profile
 {
-    public function updateProfile($form, $user, $em)
+    private $parameterBag;
+
+    public function __construct(ParameterBagInterface $parameterBag)
     {
+        $this->parameterBag = $parameterBag;
+    }
+
+    public function updateProfile($form, $user, $em)// update user profile
+    {// set user details(hydrate the user object with the form data)
         $user->setFirstname($form->get('firstname')->getData());
         $user->setLastname($form->get('lastname')->getData());
         $user->setBirthyear($form->get('birthyear')->getData());
@@ -19,13 +27,13 @@ class ProfileService
         if($form->get('image')->getData()) {
             $file = $form->get('image')->getData();
             $filename = md5(uniqid()) . '.' . $file->guessExtension();
-            $file->move($this->getParameter('upload_dir_user'), $filename);
+            $file->move($this->parameterBag->get('upload_dir_user'), $filename);
             $user->setImage($filename);
         } else {
             if($user->getImage() == null) {
                 $user->setImage('default.png');
             } else {
-            $user->setImage($user->getImage());
+                $user->setImage($user->getImage());
             }
         }
 
@@ -36,7 +44,7 @@ class ProfileService
             $user->setRoles(['ROLE_USER']);
         }
         
-        $em->persist($user);
-        $em->flush();
+        $em->persist($user);// save the changes
+        $em->flush();// commit the changes
     }
 }
