@@ -12,22 +12,22 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookingController extends AbstractController
-{// Route to view all bookings
+{// Route pour afficher les réservations
     #[Route('/bookings', name: 'bookings')]
     public function index(BookingRepository $bookingRepository): Response
     {
-        if (!$this->getUser()) {// check if user is logged in
+        if (!$this->getUser()) {// vérifier si l'utilisateur est connecté
             return $this->redirectToRoute('app_login');
         }
 
         return $this->render('booking/index.html.twig', [
             'bookings' => $bookingRepository->findBy([
                 'traveler' => $this->getUser()
-            ])// get all bookings for the current user
+            ])// récupérer les réservations de l'utilisateur connecté
         ]);
     }
 
-    // Route to make a booking
+    // Route afin de réserver une chambre
     #[Route('/book-a-room/{room}', name: 'book_room', methods: ['POST'])]
     public function bookRoom(
         Room $room, 
@@ -35,20 +35,20 @@ class BookingController extends AbstractController
         EntityManagerInterface $em
     ): Response
     {
-        if (!$this->getUser()) {// check if user is logged in
+        if (!$this->getUser()) {// vérifier si l'utilisateur est connecté
             return $this->redirectToRoute('app_login');
         }
 
-        $previous = $request->headers->get('referer');// get the previous page
-        $user = $this->getUser();// get the current user
+        $previous = $request->headers->get('referer');// récupérer la page précédente
+        $user = $this->getUser();// obtenir l'utilisateur connecté
         
-        $newBooking = new Booking();// create a new booking
-        $newBooking->setNumber(uniqid())// set a unique booking number
-                ->setTraveler($user)// set the user making the booking
-                ->setRoom($room)// set the room to book
+        $newBooking = new Booking();// créer une nouvelle réservation
+        $newBooking->setNumber(uniqid())// créer un numéro de réservation unique
+                ->setTraveler($user)// ajouter l'utilisateur connecté à la réservation
+                ->setRoom($room)// ajouter la chambre à la réservation
                 ->setCheckIn(new \DateTime($request->request->get('checkin')))
                 ->setCheckOut(new \DateTime($request->request->get('checkout')))
-                ->setOccupants($request->request->get('guests'))// set the number of guests
+                ->setOccupants($request->request->get('guests'))// indiquer le nombre d'occupants
                 ->setCreatedAt(new \DateTime('now'))
                 ;
 
